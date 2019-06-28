@@ -24,17 +24,11 @@ pipeline{
 		}
 		
 		stages{
-		
+	
 			stage('Checkout') {
 				steps {
-					echo '------------>Checkout desde Git Microservicio<------------'
-					checkout([$class: 'GitSCM', branches: [[name: 'master']], 
-					doGenerateSubmoduleConfigurations: false, 
-					extensions: [[$class: 'RelativeTargetDirectory', 
-					relativeTargetDir: 'Ceiba-Estacionamiento']], 
-					gitTool: 'Git_Centos', submoduleCfg: [], 
-					userRemoteConfigs: [[credentialsId: '7fe28495-6f45-4577-8c7b-dce727e78f14', 
-					url: 'https://github.com/jehinerrodriguez/Ceiba-Estacionamiento.git']]])
+                echo '------------>Checkout desde Git Microservicio<------------'
+                checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'Ceiba-Estacionamiento']], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: '7fe28495-6f45-4577-8c7b-dce727e78f14', url: 'https://github.com/jehinerrodriguez/Ceiba-Estacionamiento.git']]])
 				}
 			}
 		
