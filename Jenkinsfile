@@ -20,15 +20,18 @@ pipeline{
 		}
 		
 		environment {
-        PROJECT_PATH_BACK = './'
+        PROJECT_PATH_BACK = 'Estacionamiento'
+		}
+		parameters{
+			booleanParam defaultValue: false, description: 'Push a registry AWS', name: 'pushdeploy'
 		}
 		
 		stages{
-	
+		
 			stage('Checkout') {
 				steps {
                 echo '------------>Checkout desde Git Microservicio<------------'
-                checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'Ceiba-Estacionamiento']], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: '7fe28495-6f45-4577-8c7b-dce727e78f14', url: 'https://github.com/jehinerrodriguez/Ceiba-Estacionamiento.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'Estacionamiento']], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitHub_jehinerrodriguez', url: 'https://github.com/jehinerrodriguez/Ceiba-Estacionamiento.git']]])
 				}
 			}
 		
@@ -46,9 +49,9 @@ pipeline{
 					}
 				}
 			}
-			stage('Test Unitarios - Cobertura'){
+			stage('Test Unitarios -Cobertura'){
 				parallel {
-					stage('Test - Cobertura backend'){
+					stage('Test- Cobertura backend'){
 						steps {
 							echo '------------>test backend<------------'
 							dir("${PROJECT_PATH_BACK}"){
@@ -62,12 +65,13 @@ pipeline{
 			
 			stage('Sonar Analysis'){
 				steps{
-					echo '------------>Analisis de cóigo estático<------------'
+					echo '------------>Analisis de código estático<------------'
 					  withSonarQubeEnv('Sonar') {
-                        sh "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=./sonar-project.properties"
+                     sh "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=./sonar-project.properties"
                      }
 				}
-			}	
+			}
+		
 		
 
 		}
