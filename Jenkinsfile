@@ -28,7 +28,7 @@ pipeline{
 			stage('Checkout') {
 				steps {
 					echo '------------>Checkout desde Git Microservicio<------------'
-					checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
+					checkout([$class: 'GitSCM', branches: [[name: 'master']], 
 					doGenerateSubmoduleConfigurations: false, 
 					extensions: [[$class: 'RelativeTargetDirectory', 
 					relativeTargetDir: 'Ceiba-Estacionamiento']], 
