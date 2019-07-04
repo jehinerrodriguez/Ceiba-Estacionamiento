@@ -3,6 +3,7 @@ package co.com.ceiba.parqueadero.unitarias;
 import static org.hamcrest.CoreMatchers.any;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -28,7 +29,7 @@ public class VigilanteTest {
 	public static final String TIPO_CARRO = "C";
 	public static final String TIPO_MOTO = "M";
 
-	public Vigilante vigilante = new Vigilante();
+	public Vigilante vigilante = new Vigilante(registroVehiculo);
 
 	@Test
 	public void calcularPrecioCarroTest() {
@@ -61,38 +62,51 @@ public class VigilanteTest {
 	public void calcularPrecioMotoAltaTest() {
 		// Arrange
 		Calendar fechaIngreso = new GregorianCalendar(2019, Calendar.JULY, 2, 00, 00);
-		Calendar fechaSalida = new GregorianCalendar(2019, Calendar.JULY, 2, 2, 00);
+		Calendar fechaSalida = new GregorianCalendar(2019, Calendar.JULY, 2, 8, 59);
 		int cilindraje = 650;
 
 		// Act
 		double precio = vigilante.calcularPrecio(fechaIngreso, fechaSalida, TIPO_MOTO, cilindraje);
 
 		// Assert
-		assertEquals(3000, precio, 0);
-		//assertTrue(3000 == precio);
+		assertEquals(6500, precio, 0);
+	}
+	
+	@Test
+	public void validarDiaDomingoTest() {
+		// Arrange
+		Calendar fechaIngreso = new GregorianCalendar(2019, Calendar.JUNE, 30, 00, 00);
+		IngresoVehiculo ingresoVehiculo = new IngresoVehiculo(fechaIngreso, TIPO_CARRO, "ABC123");
+
+		// Act
+		vigilante.validarDia(ingresoVehiculo);
 	}
 
 	@Test
-	public void validarDiaTest() {
+	public void validarDiaLunesTest() {
 		// Arrange
 		Calendar fechaIngreso = new GregorianCalendar(2019, Calendar.JULY, 1, 00, 00);
 		IngresoVehiculo ingresoVehiculo = new IngresoVehiculo(fechaIngreso, TIPO_CARRO, "ABC123");
 
 		// Act
 		vigilante.validarDia(ingresoVehiculo);
-
-		// Assert
 	}
 
 	@Test
 	public void validarDiaNoHabilTest() {
 		// Arrange
 		Calendar fechaIngresoNoHabil = new GregorianCalendar(2019, Calendar.JULY, 3);
-		IngresoVehiculo ingresoVehiculoNoHabil = new IngresoVehiculo(fechaIngresoNoHabil, TIPO_CARRO, "BC123");
+		IngresoVehiculo ingresoVehiculoNoHabil = new IngresoVehiculo(fechaIngresoNoHabil, TIPO_CARRO, "ABC123");
 
-		// Act
-		vigilante.validarDia(ingresoVehiculoNoHabil);
+		try {
+			// Act
+			vigilante.validarDia(ingresoVehiculoNoHabil);
+			fail();
+			
+		} catch (Exception e) {
+			// Assert
+			assertEquals(Vigilante.MENSAJE_NO_HABIL, e.getMessage());
+		}
 
-		// Assert
 	}
 }

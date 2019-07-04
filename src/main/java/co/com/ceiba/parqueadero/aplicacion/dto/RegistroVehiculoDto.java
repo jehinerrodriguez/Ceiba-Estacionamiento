@@ -1,9 +1,8 @@
-package co.com.ceiba.parqueadero.dominio.modelo;
+package co.com.ceiba.parqueadero.aplicacion.dto;
 
 import java.util.Calendar;
 
-public class RegistroVehiculo {
-	
+public class RegistroVehiculoDto {
 	private Long id;
 	private Calendar fechaIngreso;
 	private Calendar fechaSalida;
@@ -11,8 +10,8 @@ public class RegistroVehiculo {
 	private long cilindraje;
 	private String placa;
 	private double valor;
-
-	public RegistroVehiculo(long id, Calendar fechaIngreso, Calendar fechaSalida, String tipoVehiculo, long cilindraje, String placa, double valor) {
+	
+	public RegistroVehiculoDto(long id, Calendar fechaIngreso, Calendar fechaSalida, String tipoVehiculo, long cilindraje, String placa, double valor) {
 		this.id = id;
 		this.fechaIngreso = fechaIngreso;
 		this.fechaSalida = fechaSalida;

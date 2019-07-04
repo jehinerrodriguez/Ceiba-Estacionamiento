@@ -27,19 +27,17 @@ public class Vigilante {
 	public static final int CILINDRAJE_ALTO = 500;
 
 	public static final String MENSAJE_NO_HABIL = "No se permite el ingreso del vehículo";
-
+	public static final String MENSAJE_CARRO_MAXIMO = "La cantidad actual de carros es la capacidad máxima";
+	public static final String MENSAJE_MOTO_MAXIMO = "La cantidad actual de motos es la capacidad máxima";
 	public static final String PLACA_REGISTRADA = "La placa del vehículo ya se encuentra registrada";
 
 	public static final String TIPO_CARRO = "C";
 	public static final String TIPO_MOTO = "M";
 
-	public static final String MENSAJE_CARRO_MAXIMO = "La cantidad actual de carros es la capacidad máxima";
-	public static final String MENSAJE_MOTO_MAXIMO = "La cantidad actual de motos es la capacidad máxima";
-
 	private RepositorioRegistroVehiculo repositorioRegistroVehiculo;
 
-	public Vigilante() {
-		//this.repositorioRegistroVehiculo = repositorioRegistroVehiculo;
+	public Vigilante(RepositorioRegistroVehiculo repositorioRegistroVehiculo) {
+		this.repositorioRegistroVehiculo = repositorioRegistroVehiculo;
 	}
 
 	public void validarCupo(IngresoVehiculo ingresoVehiculo) {
@@ -58,9 +56,8 @@ public class Vigilante {
 
 	public void validarPlaca(String placa) {
 		RegistroVehiculo registroVehiculo = repositorioRegistroVehiculo.buscarVehiculo(placa);
-		if (registroVehiculo != null) {
+		if (registroVehiculo != null)
 			throw new ParqueaderoExcepcion(PLACA_REGISTRADA);
-		}
 	}
 
 	public void validarDia(IngresoVehiculo ingresoVehiculo) {
@@ -77,32 +74,30 @@ public class Vigilante {
 		long diferenciaMilisegundos = 0;
 		double milisegundosHora = (1000 * 60 * 60);
 		double milisegundosDia = (milisegundosHora * 24);
-		
+
 		diferenciaMilisegundos = (fechaSalida.getTimeInMillis() - fechaIngreso.getTimeInMillis());
-		
+
 		diferenciaDias = (long) (diferenciaMilisegundos / milisegundosDia);
-		
+
 		diferenciaMilisegundos = (long) (diferenciaMilisegundos - (milisegundosDia * diferenciaDias));
-		
-		diferenciaHoras = diferenciaMilisegundos/milisegundosHora;
-		
-		if(diferenciaHoras >= HORAS_MAXIMAS_HORA_POR_DIA) {
+
+		diferenciaHoras = diferenciaMilisegundos / milisegundosHora;
+
+		if (diferenciaHoras >= HORAS_MAXIMAS_HORA_POR_DIA) {
 			diferenciaHoras = 0;
 			diferenciaDias++;
 		}
-		
+
 		diferenciaHoras = Math.ceil(diferenciaHoras);
-		
-		if(tipoVehiculo.equals(TIPO_CARRO)) {
-			precioFinal = diferenciaDias * PRECIO_CARRO_DIA + 
-					(diferenciaHoras * PRECIO_CARRO_HORA);
-		}else {
-			precioFinal = (double) (diferenciaDias * PRECIO_MOTO_DIA) + 
-					(diferenciaHoras * PRECIO_MOTO_HORA);
-				
-			if(cilindraje > CILINDRAJE_ALTO) {
+
+		if (tipoVehiculo.equals(TIPO_CARRO))
+			precioFinal = diferenciaDias * PRECIO_CARRO_DIA + (diferenciaHoras * PRECIO_CARRO_HORA);
+		else {
+			precioFinal = (double) (diferenciaDias * PRECIO_MOTO_DIA) + (diferenciaHoras * PRECIO_MOTO_HORA);
+
+			if (cilindraje > CILINDRAJE_ALTO)
 				precioFinal += PRECIO_ADICIONAL;
-			}
+
 		}
 		return precioFinal;
 	}

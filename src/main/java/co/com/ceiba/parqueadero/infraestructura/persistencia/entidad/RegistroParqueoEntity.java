@@ -1,26 +1,39 @@
-package co.com.ceiba.parqueadero.dominio.modelo;
+package co.com.ceiba.parqueadero.infraestructura.persistencia.entidad;
 
 import java.util.Calendar;
 
-public class RegistroVehiculo {
-	
-	private Long id;
-	private Calendar fechaIngreso;
-	private Calendar fechaSalida;
-	private String tipoVehiculo;
-	private long cilindraje;
-	private String placa;
-	private double valor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
-	public RegistroVehiculo(long id, Calendar fechaIngreso, Calendar fechaSalida, String tipoVehiculo, long cilindraje, String placa, double valor) {
-		this.id = id;
-		this.fechaIngreso = fechaIngreso;
-		this.fechaSalida = fechaSalida;
-		this.tipoVehiculo = tipoVehiculo;
-		this.cilindraje = cilindraje;
-		this.placa = placa;
-		this.valor = valor;
-	}
+@Entity(name = "RegistroParqueo")
+@NamedQuery(name = "RegistroParqueo.findByCodigo", query = "SELECT id FROM RegistroParqueo parqueo WHERE parqueo.id = :id")
+public class RegistroParqueoEntity {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+	@Column(nullable = false)
+	private Calendar fechaIngreso;
+	
+	@Column(nullable = false)
+	private Calendar fechaSalida;
+
+	@Column(nullable = false)
+	private String tipoVehiculo;
+	
+	@Column(nullable = false)
+	private int cilindraje;
+	
+	@Column(nullable = false)
+	private String placa;
+	
+	@Column(nullable = false)
+	private double valor;
 
 	public Long getId() {
 		return id;
@@ -54,11 +67,11 @@ public class RegistroVehiculo {
 		this.tipoVehiculo = tipoVehiculo;
 	}
 
-	public long getCilindraje() {
+	public int getCilindraje() {
 		return cilindraje;
 	}
 
-	public void setCilindraje(long cilindraje) {
+	public void setCilindraje(int cilindraje) {
 		this.cilindraje = cilindraje;
 	}
 
