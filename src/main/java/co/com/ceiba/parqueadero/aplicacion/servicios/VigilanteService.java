@@ -9,5 +9,4 @@ public class VigilanteService implements IngresoVehiculoService{
 	public RegistroVehiculoDto ingresarVehiculo(IngresoVehiculoDto ingresoVehiculoDto) {
 		return null;
 	}
-
 }

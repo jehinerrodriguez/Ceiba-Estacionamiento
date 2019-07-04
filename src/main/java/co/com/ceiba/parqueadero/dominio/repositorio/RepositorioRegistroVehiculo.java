@@ -13,5 +13,4 @@ public interface RepositorioRegistroVehiculo {
 	public RegistroVehiculo buscarVehiculo(String placa);
 	
 	public List<RegistroVehiculo> mostrarVehiculos();
-
 }

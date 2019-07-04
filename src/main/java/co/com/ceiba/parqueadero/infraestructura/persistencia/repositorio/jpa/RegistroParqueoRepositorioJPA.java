@@ -1,5 +1,7 @@
 package co.com.ceiba.parqueadero.infraestructura.persistencia.repositorio.jpa;
 
-public class RegistroParqueoRepositorioJPA {
+import co.com.ceiba.parqueadero.infraestructura.persistencia.entidad.RegistroParqueoEntity;
 
+public interface RegistroParqueoRepositorioJPA {
+	RegistroParqueoEntity obtenerRegistroParqueoEntityPorId(int id);
 }
