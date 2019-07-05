@@ -1,6 +1,7 @@
 package co.com.ceiba.parqueadero.dominio.modelo;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import co.com.ceiba.parqueadero.dominio.excepciones.ParqueaderoExcepcion;
 import co.com.ceiba.parqueadero.dominio.repositorio.RepositorioRegistroVehiculo;
@@ -33,6 +34,9 @@ public class Vigilante {
 
 	public static final String TIPO_CARRO = "C";
 	public static final String TIPO_MOTO = "M";
+
+	public static final long MILISEGUNDOS_HORA = 3600000;
+	public static final long MILISEGUNDOS_DIA = 86400000;
 
 	private RepositorioRegistroVehiculo repositorioRegistroVehiculo;
 
@@ -68,37 +72,24 @@ public class Vigilante {
 	}
 
 	public double calcularPrecio(Calendar fechaIngreso, Calendar fechaSalida, String tipoVehiculo, int cilindraje) {
-		double precioFinal = 0;
 		long diferenciaDias = 0;
 		double diferenciaHoras = 0;
 		long diferenciaMilisegundos = 0;
-		double milisegundosHora = (1000 * 60 * 60);
-		double milisegundosDia = (milisegundosHora * 24);
 
 		diferenciaMilisegundos = (fechaSalida.getTimeInMillis() - fechaIngreso.getTimeInMillis());
-
-		diferenciaDias = (long) (diferenciaMilisegundos / milisegundosDia);
-
-		diferenciaMilisegundos = (long) (diferenciaMilisegundos - (milisegundosDia * diferenciaDias));
-
-		diferenciaHoras = diferenciaMilisegundos / milisegundosHora;
+		diferenciaDias = (diferenciaMilisegundos / MILISEGUNDOS_DIA);
+		diferenciaMilisegundos = (diferenciaMilisegundos - (MILISEGUNDOS_DIA * diferenciaDias));
+		diferenciaHoras = (double) diferenciaMilisegundos / MILISEGUNDOS_HORA;
 
 		if (diferenciaHoras >= HORAS_MAXIMAS_HORA_POR_DIA) {
 			diferenciaHoras = 0;
 			diferenciaDias++;
 		}
-
 		diferenciaHoras = Math.ceil(diferenciaHoras);
 
-		if (tipoVehiculo.equals(TIPO_CARRO))
-			precioFinal = diferenciaDias * PRECIO_CARRO_DIA + (diferenciaHoras * PRECIO_CARRO_HORA);
-		else {
-			precioFinal = (double) (diferenciaDias * PRECIO_MOTO_DIA) + (diferenciaHoras * PRECIO_MOTO_HORA);
-
-			if (cilindraje > CILINDRAJE_ALTO)
-				precioFinal += PRECIO_ADICIONAL;
-
-		}
-		return precioFinal;
+		double precioFinal = tipoVehiculo.equals(TIPO_CARRO) ? diferenciaDias * PRECIO_CARRO_DIA + (diferenciaHoras * PRECIO_CARRO_HORA)
+				: (diferenciaDias * PRECIO_MOTO_DIA) + (diferenciaHoras * PRECIO_MOTO_HORA);
+		
+		return (cilindraje > CILINDRAJE_ALTO && tipoVehiculo.equals(TIPO_MOTO)) ? precioFinal + PRECIO_ADICIONAL : precioFinal;
 	}
 }
